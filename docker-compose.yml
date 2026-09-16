@@ -1,0 +1,15 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: volako-postgres
+    environment:
+      POSTGRES_DB: volako
+      POSTGRES_USER: volako
+      POSTGRES_PASSWORD: volako
+    ports:
+      - "5432:5432"
+    volumes:
+      - volako-data:/var/lib/postgresql/data
+
+volumes:
+  volako-data:

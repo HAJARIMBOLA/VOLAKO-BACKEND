@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: volako-backend
+    runtime: java
+    plan: free
+    buildCommand: ./mvnw clean package -DskipTests
+    startCommand: java -jar target/backend-0.1.0.jar
+    envVars:
+      - key: DB_URL
+        sync: false
+      - key: DB_USERNAME
+        sync: false
+      - key: DB_PASSWORD
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+      - key: JWT_ACCESS_EXPIRATION_MS
+        value: "900000"
+      - key: JWT_REFRESH_EXPIRATION_MS
+        value: "604800000"
+      - key: FRONTEND_URL
+        sync: false
