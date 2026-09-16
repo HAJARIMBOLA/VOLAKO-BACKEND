@@ -21,7 +21,7 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long>,
     BigDecimal sumAmountByAccountIdAndType(@Param("accountId") Long accountId, @Param("type") TransactionType type);
 
     @Query("select coalesce(sum(t.amount), 0) from Transaction t where t.user.id = :userId and t.type = :type "
-            + "and (:from is null or t.transactionDate >= :from) and (:to is null or t.transactionDate <= :to)")
+            + "and t.transactionDate >= :from and t.transactionDate <= :to")
     BigDecimal sumAmountByUserIdAndTypeAndPeriod(
             @Param("userId") Long userId,
             @Param("type") TransactionType type,

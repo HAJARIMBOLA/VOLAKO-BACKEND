@@ -108,6 +108,40 @@ class AccountTransactionIntegrationTest {
                 .andExpect(jsonPath("$[0].active").value(false));
     }
 
+    @Test
+    void dashboardReturnsZeroTotalsForABrandNewUser() throws Exception {
+        mockMvc.perform(get("/api/dashboard").header("Authorization", "Bearer " + accessToken))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.totalBalance").value(0))
+                .andExpect(jsonPath("$.totalIncome").value(0))
+                .andExpect(jsonPath("$.totalExpense").value(0));
+    }
+
+    @Test
+    void dashboardSumsIncomeAndExpenseForTheCurrentPeriod() throws Exception {
+        long accountId = createAccount("Cash", "CASH", true);
+        long expenseCategoryId = findCategoryId("Nourriture", "EXPENSE");
+        long incomeCategoryId = findCategoryId("Salaire", "INCOME");
+
+        mockMvc.perform(post("/api/transactions")
+                        .header("Authorization", "Bearer " + accessToken)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(transactionPayload("INCOME", "200000", accountId, incomeCategoryId, "Salaire")))
+                .andExpect(status().isCreated());
+
+        mockMvc.perform(post("/api/transactions")
+                        .header("Authorization", "Bearer " + accessToken)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(transactionPayload("EXPENSE", "45000", accountId, expenseCategoryId, "Courses")))
+                .andExpect(status().isCreated());
+
+        mockMvc.perform(get("/api/dashboard").header("Authorization", "Bearer " + accessToken))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.totalBalance").value(155000))
+                .andExpect(jsonPath("$.totalIncome").value(200000))
+                .andExpect(jsonPath("$.totalExpense").value(45000));
+    }
+
     private long createAccount(String name, String type, boolean allowNegativeBalance) throws Exception {
         String payload = """
                 {"name": "%s", "type": "%s", "allowNegativeBalance": %s}
