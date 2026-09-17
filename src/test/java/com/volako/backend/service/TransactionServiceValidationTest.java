@@ -45,7 +45,7 @@ class TransactionServiceValidationTest {
     @InjectMocks
     private TransactionService transactionService;
 
-    private final User user = User.builder().id(1L).email("nija@volako.mg").build();
+    private final User user = User.builder().id(1L).phoneNumber("0340000000").build();
     private final Category expenseCategory = Category.builder().id(10L).type(TransactionType.EXPENSE).build();
 
     @Test

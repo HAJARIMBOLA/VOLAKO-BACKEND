@@ -24,11 +24,11 @@ public class JwtService {
         this.accessTokenExpirationMs = accessTokenExpirationMs;
     }
 
-    public String generateAccessToken(Long userId, String email) {
+    public String generateAccessToken(Long userId, String phoneNumber) {
         Date now = new Date();
         Date expiry = new Date(now.getTime() + accessTokenExpirationMs);
         return Jwts.builder()
-                .subject(email)
+                .subject(phoneNumber)
                 .claim("userId", userId)
                 .issuedAt(now)
                 .expiration(expiry)
@@ -36,7 +36,7 @@ public class JwtService {
                 .compact();
     }
 
-    public String extractEmail(String token) {
+    public String extractPhoneNumber(String token) {
         return parseClaims(token).getSubject();
     }
 

@@ -28,10 +28,10 @@ class AuthFlowIntegrationTest {
 
     @Test
     void registerLoginAccessProtectedRouteThenRefresh() throws Exception {
-        String email = "nija+" + System.nanoTime() + "@volako.mg";
+        String phoneNumber = "0340" + (System.nanoTime() % 1_000_000);
         String registerPayload = """
-                {"email": "%s", "password": "SuperSecret123", "fullName": "Nija Rakoto"}
-                """.formatted(email);
+                {"phoneNumber": "%s", "password": "SuperSecret123", "fullName": "Nija Rakoto"}
+                """.formatted(phoneNumber);
 
         String registerBody = mockMvc.perform(post("/api/auth/register")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -39,7 +39,7 @@ class AuthFlowIntegrationTest {
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.accessToken").exists())
                 .andExpect(jsonPath("$.refreshToken").exists())
-                .andExpect(jsonPath("$.user.email").value(email))
+                .andExpect(jsonPath("$.user.phoneNumber").value(phoneNumber))
                 .andReturn().getResponse().getContentAsString();
 
         JsonNode registerJson = objectMapper.readTree(registerBody);
@@ -53,12 +53,12 @@ class AuthFlowIntegrationTest {
         // Protected route with the access token succeeds.
         mockMvc.perform(get("/api/auth/me").header("Authorization", "Bearer " + accessToken))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.email").value(email));
+                .andExpect(jsonPath("$.phoneNumber").value(phoneNumber));
 
         // Login with the same credentials works.
         String loginPayload = """
-                {"email": "%s", "password": "SuperSecret123"}
-                """.formatted(email);
+                {"phoneNumber": "%s", "password": "SuperSecret123"}
+                """.formatted(phoneNumber);
         mockMvc.perform(post("/api/auth/login")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(loginPayload))
@@ -82,11 +82,11 @@ class AuthFlowIntegrationTest {
     }
 
     @Test
-    void registeringTwiceWithSameEmailFails() throws Exception {
-        String email = "duplicate+" + System.nanoTime() + "@volako.mg";
+    void registeringTwiceWithSamePhoneNumberFails() throws Exception {
+        String phoneNumber = "0341" + (System.nanoTime() % 1_000_000);
         String payload = """
-                {"email": "%s", "password": "SuperSecret123", "fullName": "Nija Rakoto"}
-                """.formatted(email);
+                {"phoneNumber": "%s", "password": "SuperSecret123", "fullName": "Nija Rakoto"}
+                """.formatted(phoneNumber);
 
         mockMvc.perform(post("/api/auth/register")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -97,6 +97,6 @@ class AuthFlowIntegrationTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(payload))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.error").value("EMAIL_TAKEN"));
+                .andExpect(jsonPath("$.error").value("PHONE_NUMBER_TAKEN"));
     }
 }

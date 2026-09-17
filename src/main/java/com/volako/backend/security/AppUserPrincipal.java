@@ -11,12 +11,12 @@ import java.util.List;
 public class AppUserPrincipal implements UserDetails {
 
     private final Long id;
-    private final String email;
+    private final String phoneNumber;
     private final String passwordHash;
 
     public AppUserPrincipal(User user) {
         this.id = user.getId();
-        this.email = user.getEmail();
+        this.phoneNumber = user.getPhoneNumber();
         this.passwordHash = user.getPasswordHash();
     }
 
@@ -36,6 +36,6 @@ public class AppUserPrincipal implements UserDetails {
 
     @Override
     public String getUsername() {
-        return email;
+        return phoneNumber;
     }
 }

@@ -32,10 +32,10 @@ class AccountTransactionIntegrationTest {
 
     @BeforeEach
     void registerUser() throws Exception {
-        String email = "accounts+" + System.nanoTime() + "@volako.mg";
+        String phoneNumber = "0342" + (System.nanoTime() % 1_000_000);
         String payload = """
-                {"email": "%s", "password": "SuperSecret123", "fullName": "Nija Rakoto"}
-                """.formatted(email);
+                {"phoneNumber": "%s", "password": "SuperSecret123", "fullName": "Nija Rakoto"}
+                """.formatted(phoneNumber);
 
         String body = mockMvc.perform(post("/api/auth/register")
                         .contentType(MediaType.APPLICATION_JSON)

@@ -28,7 +28,7 @@ class DefaultCategorySeederTest {
 
     @Test
     void seedsSixSystemCategoriesOnRegistration() {
-        User user = User.builder().id(1L).email("nija@volako.mg").build();
+        User user = User.builder().id(1L).phoneNumber("0340000000").build();
 
         seeder.seedFor(user);
 

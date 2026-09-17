@@ -35,12 +35,12 @@ public class AuthService {
 
     @Transactional
     public AuthResponse register(RegisterRequest request) {
-        if (userRepository.existsByEmail(request.email())) {
-            throw new BadRequestException("EMAIL_TAKEN", "Un compte existe déjà avec cet email");
+        if (userRepository.existsByPhoneNumber(request.phoneNumber())) {
+            throw new BadRequestException("PHONE_NUMBER_TAKEN", "Un compte existe déjà avec ce numéro de téléphone");
         }
 
         User user = User.builder()
-                .email(request.email())
+                .phoneNumber(request.phoneNumber())
                 .passwordHash(passwordEncoder.encode(request.password()))
                 .fullName(request.fullName())
                 .build();
@@ -53,11 +53,11 @@ public class AuthService {
 
     @Transactional
     public AuthResponse login(LoginRequest request) {
-        User user = userRepository.findByEmail(request.email())
-                .orElseThrow(() -> new UnauthorizedException("Email ou mot de passe incorrect"));
+        User user = userRepository.findByPhoneNumber(request.phoneNumber())
+                .orElseThrow(() -> new UnauthorizedException("Numéro de téléphone ou mot de passe incorrect"));
 
         if (!passwordEncoder.matches(request.password(), user.getPasswordHash())) {
-            throw new UnauthorizedException("Email ou mot de passe incorrect");
+            throw new UnauthorizedException("Numéro de téléphone ou mot de passe incorrect");
         }
 
         return buildAuthResponse(user);
@@ -94,7 +94,7 @@ public class AuthService {
     }
 
     private AuthResponse buildAuthResponse(User user) {
-        String accessToken = jwtService.generateAccessToken(user.getId(), user.getEmail());
+        String accessToken = jwtService.generateAccessToken(user.getId(), user.getPhoneNumber());
         String rawRefreshToken = UUID.randomUUID().toString() + UUID.randomUUID();
 
         RefreshToken refreshToken = RefreshToken.builder()
