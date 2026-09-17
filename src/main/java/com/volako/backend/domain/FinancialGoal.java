@@ -9,35 +9,35 @@ import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.OffsetDateTime;
 
 @Entity
-@Table(name = "users")
+@Table(name = "financial_goals")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class User {
+public class FinancialGoal {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "first_name", nullable = false)
-    private String firstName;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
-    @Column(name = "last_name", nullable = false)
-    private String lastName;
+    @Column(nullable = false)
+    private String name;
 
-    @Column(name = "phone_number", nullable = false, unique = true)
-    private String phoneNumber;
+    @Column(name = "target_amount", nullable = false, precision = 15, scale = 2)
+    private BigDecimal targetAmount;
 
-    @Column(nullable = false, unique = true)
-    private String email;
-
-    @Column(name = "password_hash", nullable = false)
-    private String passwordHash;
+    @Column(name = "target_date")
+    private LocalDate targetDate;
 
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)

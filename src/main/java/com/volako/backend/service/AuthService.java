@@ -38,11 +38,16 @@ public class AuthService {
         if (userRepository.existsByPhoneNumber(request.phoneNumber())) {
             throw new BadRequestException("PHONE_NUMBER_TAKEN", "Un compte existe déjà avec ce numéro de téléphone");
         }
+        if (userRepository.existsByEmail(request.email())) {
+            throw new BadRequestException("EMAIL_TAKEN", "Un compte existe déjà avec cet email");
+        }
 
         User user = User.builder()
+                .firstName(request.firstName())
+                .lastName(request.lastName())
                 .phoneNumber(request.phoneNumber())
+                .email(request.email())
                 .passwordHash(passwordEncoder.encode(request.password()))
-                .fullName(request.fullName())
                 .build();
         user = userRepository.save(user);
 

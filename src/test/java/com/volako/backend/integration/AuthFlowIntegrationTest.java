@@ -29,9 +29,10 @@ class AuthFlowIntegrationTest {
     @Test
     void registerLoginAccessProtectedRouteThenRefresh() throws Exception {
         String phoneNumber = "0340" + (System.nanoTime() % 1_000_000);
+        String email = "nija+" + System.nanoTime() + "@volako.mg";
         String registerPayload = """
-                {"phoneNumber": "%s", "password": "SuperSecret123", "fullName": "Nija Rakoto"}
-                """.formatted(phoneNumber);
+                {"firstName": "Nija", "lastName": "Rakoto", "phoneNumber": "%s", "email": "%s", "password": "SuperSecret123"}
+                """.formatted(phoneNumber, email);
 
         String registerBody = mockMvc.perform(post("/api/auth/register")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -84,9 +85,10 @@ class AuthFlowIntegrationTest {
     @Test
     void registeringTwiceWithSamePhoneNumberFails() throws Exception {
         String phoneNumber = "0341" + (System.nanoTime() % 1_000_000);
+        String email = "duplicate+" + System.nanoTime() + "@volako.mg";
         String payload = """
-                {"phoneNumber": "%s", "password": "SuperSecret123", "fullName": "Nija Rakoto"}
-                """.formatted(phoneNumber);
+                {"firstName": "Nija", "lastName": "Rakoto", "phoneNumber": "%s", "email": "%s", "password": "SuperSecret123"}
+                """.formatted(phoneNumber, email);
 
         mockMvc.perform(post("/api/auth/register")
                         .contentType(MediaType.APPLICATION_JSON)

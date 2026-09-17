@@ -14,10 +14,13 @@ import java.util.List;
 @RequiredArgsConstructor
 public class DefaultCategorySeeder {
 
+    public static final String DEBT_REPAYMENT_MADE_CATEGORY = "Remboursement effectué";
+    public static final String DEBT_REPAYMENT_RECEIVED_CATEGORY = "Remboursement reçu";
+
     private static final List<String> DEFAULT_EXPENSE_CATEGORIES =
-            List.of("Nourriture", "Transport", "Logement", "Loisirs");
+            List.of("Nourriture", "Transport", "Logement", "Loisirs", DEBT_REPAYMENT_MADE_CATEGORY);
     private static final List<String> DEFAULT_INCOME_CATEGORIES =
-            List.of("Salaire", "Freelance");
+            List.of("Salaire", "Freelance", DEBT_REPAYMENT_RECEIVED_CATEGORY);
 
     private final CategoryRepository categoryRepository;
 
