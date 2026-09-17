@@ -12,7 +12,8 @@ public record AccountResponse(
         String currency,
         boolean allowNegativeBalance,
         boolean active,
-        BigDecimal balance
+        BigDecimal balance,
+        String accountNumber
 ) {
     public static AccountResponse from(Account account, BigDecimal balance) {
         return new AccountResponse(
@@ -22,7 +23,8 @@ public record AccountResponse(
                 account.getCurrency(),
                 account.isAllowNegativeBalance(),
                 account.isActive(),
-                balance
+                balance,
+                account.getAccountNumber()
         );
     }
 }

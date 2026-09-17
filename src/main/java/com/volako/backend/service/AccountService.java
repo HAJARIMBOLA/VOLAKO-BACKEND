@@ -40,6 +40,7 @@ public class AccountService {
                 .name(request.name())
                 .type(request.type())
                 .allowNegativeBalance(request.allowNegativeBalance() == null || request.allowNegativeBalance())
+                .accountNumber(request.accountNumber())
                 .active(true)
                 .build();
         account = accountRepository.save(account);
@@ -56,6 +57,7 @@ public class AccountService {
         if (request.allowNegativeBalance() != null) {
             account.setAllowNegativeBalance(request.allowNegativeBalance());
         }
+        account.setAccountNumber(request.accountNumber());
         account = accountRepository.save(account);
 
         return AccountResponse.from(account, computeBalance(account.getId()));

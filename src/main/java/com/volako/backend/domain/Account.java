@@ -40,6 +40,11 @@ public class Account {
     @Builder.Default
     private String currency = "MGA";
 
+    /** Bank account number, or mobile money phone number — lets a user tell
+     *  apart multiple accounts of the same type. Optional. */
+    @Column(name = "account_number", length = 50)
+    private String accountNumber;
+
     @Column(name = "allow_negative_balance", nullable = false)
     @Builder.Default
     private boolean allowNegativeBalance = true;
