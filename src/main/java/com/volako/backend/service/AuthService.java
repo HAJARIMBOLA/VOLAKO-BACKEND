@@ -58,11 +58,11 @@ public class AuthService {
 
     @Transactional
     public AuthResponse login(LoginRequest request) {
-        User user = userRepository.findByPhoneNumber(request.phoneNumber())
-                .orElseThrow(() -> new UnauthorizedException("Numéro de téléphone ou mot de passe incorrect"));
+        User user = userRepository.findByEmailOrPhoneNumber(request.identifier())
+                .orElseThrow(() -> new UnauthorizedException("Identifiant ou mot de passe incorrect"));
 
         if (!passwordEncoder.matches(request.password(), user.getPasswordHash())) {
-            throw new UnauthorizedException("Numéro de téléphone ou mot de passe incorrect");
+            throw new UnauthorizedException("Identifiant ou mot de passe incorrect");
         }
 
         return buildAuthResponse(user);

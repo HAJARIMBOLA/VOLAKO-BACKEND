@@ -56,13 +56,22 @@ class AuthFlowIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.phoneNumber").value(phoneNumber));
 
-        // Login with the same credentials works.
-        String loginPayload = """
-                {"phoneNumber": "%s", "password": "SuperSecret123"}
+        // Login works with either the phone number or the email.
+        String loginByPhonePayload = """
+                {"identifier": "%s", "password": "SuperSecret123"}
                 """.formatted(phoneNumber);
         mockMvc.perform(post("/api/auth/login")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(loginPayload))
+                        .content(loginByPhonePayload))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.accessToken").exists());
+
+        String loginByEmailPayload = """
+                {"identifier": "%s", "password": "SuperSecret123"}
+                """.formatted(email);
+        mockMvc.perform(post("/api/auth/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(loginByEmailPayload))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.accessToken").exists());
 
