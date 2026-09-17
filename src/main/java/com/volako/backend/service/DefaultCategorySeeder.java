@@ -16,9 +16,10 @@ public class DefaultCategorySeeder {
 
     public static final String DEBT_REPAYMENT_MADE_CATEGORY = "Remboursement effectué";
     public static final String DEBT_REPAYMENT_RECEIVED_CATEGORY = "Remboursement reçu";
+    public static final String LOAN_REPAYMENT_CATEGORY = "Remboursement crédit";
 
     private static final List<String> DEFAULT_EXPENSE_CATEGORIES =
-            List.of("Nourriture", "Transport", "Logement", "Loisirs", DEBT_REPAYMENT_MADE_CATEGORY);
+            List.of("Nourriture", "Transport", "Logement", "Loisirs", DEBT_REPAYMENT_MADE_CATEGORY, LOAN_REPAYMENT_CATEGORY);
     private static final List<String> DEFAULT_INCOME_CATEGORIES =
             List.of("Salaire", "Freelance", DEBT_REPAYMENT_RECEIVED_CATEGORY);
 

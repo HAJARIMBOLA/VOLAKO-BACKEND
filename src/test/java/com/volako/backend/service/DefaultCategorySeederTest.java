@@ -27,13 +27,13 @@ class DefaultCategorySeederTest {
     private DefaultCategorySeeder seeder;
 
     @Test
-    void seedsEightSystemCategoriesOnRegistration() {
+    void seedsNineSystemCategoriesOnRegistration() {
         User user = User.builder().id(1L).phoneNumber("0340000000").build();
 
         seeder.seedFor(user);
 
         ArgumentCaptor<Category> captor = ArgumentCaptor.forClass(Category.class);
-        verify(categoryRepository, times(8)).save(captor.capture());
+        verify(categoryRepository, times(9)).save(captor.capture());
 
         List<Category> saved = captor.getAllValues();
         assertThat(saved).allMatch(Category::isSystem);
@@ -42,7 +42,8 @@ class DefaultCategorySeederTest {
 
         assertThat(saved).filteredOn(c -> c.getType() == TransactionType.EXPENSE)
                 .extracting(Category::getName)
-                .containsExactlyInAnyOrder("Nourriture", "Transport", "Logement", "Loisirs", "Remboursement effectué");
+                .containsExactlyInAnyOrder(
+                        "Nourriture", "Transport", "Logement", "Loisirs", "Remboursement effectué", "Remboursement crédit");
 
         assertThat(saved).filteredOn(c -> c.getType() == TransactionType.INCOME)
                 .extracting(Category::getName)
